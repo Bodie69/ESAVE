@@ -1,0 +1,21 @@
+# Normalize text files to LF in the repo and the working tree,
+# regardless of each machine's core.autocrlf setting.
+* text=auto eol=lf
+
+# Windows scripts must stay CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Shell script run by Gradle on Unix; CRLF breaks it
+gradlew text eol=lf
+
+# Binaries
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.jar binary
+*.jks binary
+*.keystore binary
+*.bin binary
