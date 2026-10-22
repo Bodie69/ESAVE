@@ -25,6 +25,32 @@ Occupancy-driven lighting and fan control with energy monitoring for one classro
 | `firebase-tests/` | Emulator tests for the rules (`npm test`) |
 | `artwork/` | Source icon and the script that generates the adaptive launcher icon |
 
+## Prerequisites
+
+| Tool | Needed for | Notes |
+|---|---|---|
+| Git | everything | `git clone https://github.com/Bodie69/ESAVE.git` |
+| [PlatformIO](https://platformio.org/install) (CLI or VS Code extension) | firmware | Downloads the ESP32 platform, toolchain and libraries on first build |
+| USB-serial driver for the board (CP210x or CH340) | flashing | The board shows up as a COM port (Windows) or `/dev/ttyUSB*` (Linux) |
+| JDK 17 | Android app | Android Studio's bundled JDK works; Gradle 8.14 and AGP 8.11.1 come from the wrapper |
+| Android SDK, platform 35 | Android app | Install with Android Studio, or point `sdk.dir` in `local.properties` at an existing SDK |
+| Node.js + Java | rules tests only | `firebase-tools` is installed locally by `npm install` |
+| A Firebase project | cloud features | Realtime Database + Email/Password Authentication |
+
+## Quick start
+
+1. **Firebase:** create the project, the accounts, the access list and deploy the rules
+   ([section 3](#3-firebase)).
+2. **Firmware:** copy `firmware/include/secrets.example.h` to `secrets.h`, fill it in, then build
+   and flash ([section 2](#2-firmware)).
+3. **App:** add the Firebase settings to `local.properties`, then build and install the APK
+   ([section 4](#4-android-app)).
+4. **Room:** set the controller's Wi-Fi, pair the phone, correct the count
+   ([section 5](#5-commissioning-a-room)).
+
+The room keeps working over Bluetooth without step 1, but the app build still needs
+placeholder values for `rsu.firebaseApiKey` and `rsu.firebaseDatabaseUrl`.
+
 ## 1. Hardware and wiring
 
 Board: **ESP32-WROOM-32** (classic ESP32 — Bluetooth Classic SPP is required, so not S3/C3).
@@ -54,6 +80,11 @@ pio run                     # build (default env: Arduino-ESP32 core 3.3.11)
 pio run -t upload           # build and flash
 pio device monitor          # serial log, 115200 baud, decodes crash backtraces
 ```
+
+On Windows (PowerShell) use `Copy-Item include\secrets.example.h include\secrets.h` for the copy
+step. If several serial ports are present, pick one with `pio run -t upload --upload-port COM5`
+(and `pio device monitor --port COM5`). If the upload stalls at `Connecting...`, hold the board's
+**BOOT** button, tap **EN**, then release BOOT once the upload starts.
 
 | Environment | Platform | Arduino-ESP32 core | Notes |
 |---|---|---|---|
@@ -142,7 +173,9 @@ for 3 minutes (`CONTROL_LINK_LOST_AUTO_MS`), it switches back to AUTO (saved in 
    One account may be in both lists if the app and the ESP32 share a login.
 3. **Deploy the rules** — only *after* step 2, or every request is denied:
    paste `database.rules.json` into *Realtime Database → Rules*, or run
-   `firebase deploy --only database`.
+   `firebase login` and then `firebase deploy --only database --project <project-id>` from the
+   repository root (without a global install, use `npx firebase` from `firebase-tests/` after
+   step 4's `npm install`, adding `--config ../firebase.json`).
 4. **Test the rules** (needs Node.js and Java; starts a local emulator, touches nothing online):
    ```sh
    cd firebase-tests && npm install && npm test     # expect: 83/83 passed
@@ -169,7 +202,12 @@ rsu.bluetoothPin=<same as BLUETOOTH_PIN in secrets.h>
 ./gradlew testDebugUnitTest      # unit tests (controller state parsing)
 ./gradlew assembleDebug          # debug APK
 ./gradlew assembleRelease        # R8-shrunk release APK (unsigned without keystore.properties)
+./gradlew installDebug           # build and install on a connected phone (USB debugging on)
 ```
+
+On Windows use `gradlew.bat` (or `.\gradlew` in PowerShell). The APKs land in
+`app/build/outputs/apk/<debug|release>/`. Opening the project folder in Android Studio works
+too: it creates `local.properties` with `sdk.dir`, and you add the `rsu.*` lines to it.
 
 Release signing: create `keystore.properties` in the project root (git-ignored):
 
