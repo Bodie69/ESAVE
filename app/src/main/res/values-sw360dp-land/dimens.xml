@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Typical phones in landscape (smallest width wins over orientation, so this overrides
+     values-sw360dp): little height, so the bars and splash shrink. -->
+<resources>
+    <dimen name="header_min_height">58dp</dimen>
+    <dimen name="header_logo">40dp</dimen>
+    <dimen name="header_seal">34dp</dimen>
+    <dimen name="nav_min_height">62dp</dimen>
+    <dimen name="nav_icon">24dp</dimen>
+    <dimen name="splash_logo">100dp</dimen>
+    <dimen name="splash_seal">88dp</dimen>
+</resources>

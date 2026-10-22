@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tablets (600dp and up). -->
+<resources>
+    <!-- Screen edge padding; MainActivity widens it on large screens so content stays at most
+         content_max_width wide and centered. -->
+    <dimen name="screen_padding">24dp</dimen>
+    <dimen name="content_max_width">640dp</dimen>
+
+    <!-- App bar (a minimum: it grows if the system font is large) -->
+    <dimen name="header_min_height">88dp</dimen>
+    <dimen name="header_logo">60dp</dimen>
+    <dimen name="header_seal">52dp</dimen>
+    <dimen name="header_title_text">22sp</dimen>
+    <dimen name="header_subtitle_text">14sp</dimen>
+
+    <!-- Bottom navigation -->
+    <dimen name="nav_min_height">84dp</dimen>
+    <dimen name="nav_icon">32dp</dimen>
+    <dimen name="nav_label_text">12sp</dimen>
+
+    <!-- Devices screen: bulbs two per row, fans two per row -->
+    <dimen name="relay_bulb">136dp</dimen>
+    <dimen name="relay_glow">176dp</dimen>
+    <dimen name="relay_fan">156dp</dimen>
+    <dimen name="relay_card_min_height">460dp</dimen>
+    <dimen name="relay_label_text">15sp</dimen>
+
+    <!-- Metric cards and chart -->
+    <dimen name="metric_card_min_height">176dp</dimen>
+    <dimen name="metric_card_min_height_compact">120dp</dimen>
+    <dimen name="chart_height">280dp</dimen>
+
+    <!-- Splash -->
+    <dimen name="splash_logo">200dp</dimen>
+    <dimen name="splash_seal">176dp</dimen>
+    <dimen name="splash_title_text">32sp</dimen>
+    <dimen name="splash_subtitle_text">19sp</dimen>
+</resources>

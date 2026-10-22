@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Soft yellow halo behind a bulb that is ON (view activated); nothing when OFF. Drawn on a
+     124dp view centered on the 96dp bulb, so it spreads past the bulb and its tile. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_activated="true">
+        <shape android:shape="oval">
+            <gradient android:type="radial" android:gradientRadius="62dp"
+                android:startColor="#CCFFF59D" android:centerColor="#59FFD600" android:endColor="#00FFD600" />
+        </shape>
+    </item>
+    <item><shape android:shape="oval"><solid android:color="#00000000" /></shape></item>
+</selector>

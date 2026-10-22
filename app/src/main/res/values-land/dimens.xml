@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Small phones in landscape: little height, so the bars and splash shrink. -->
+<resources>
+    <dimen name="header_min_height">54dp</dimen>
+    <dimen name="header_logo">36dp</dimen>
+    <dimen name="header_seal">30dp</dimen>
+    <dimen name="nav_min_height">58dp</dimen>
+    <dimen name="nav_icon">22dp</dimen>
+    <dimen name="splash_logo">88dp</dimen>
+    <dimen name="splash_seal">78dp</dimen>
+</resources>

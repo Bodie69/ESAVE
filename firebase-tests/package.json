@@ -1,0 +1,14 @@
+{
+  "name": "esave-rules-tests",
+  "private": true,
+  "description": "Security-rules tests for database.rules.json using the Firebase Realtime Database emulator.",
+  "type": "module",
+  "scripts": {
+    "test": "cd .. && firebase emulators:exec --only database --project demo-rsu \"node firebase-tests/rules.test.mjs\""
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "5.0.2",
+    "firebase": "12.19.0",
+    "firebase-tools": "15.34.0"
+  }
+}

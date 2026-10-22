@@ -1,0 +1,31 @@
+# --- Secrets: never commit ---
+# Firebase controller account + Bluetooth PIN + setup AP password (copy secrets.example.h instead)
+firmware/include/secrets.h
+# SDK path + Firebase API key / database URL / optional Bluetooth PIN for the app
+local.properties
+# Release signing
+keystore.properties
+*.jks
+*.keystore
+
+# --- Android / Gradle ---
+.gradle/
+build/
+.idea/
+*.iml
+captures/
+.cxx/
+.externalNativeBuild/
+
+# --- Firmware (PlatformIO) ---
+firmware/.pio/
+firmware/.vscode/
+
+# --- Firebase rules tests ---
+firebase-tests/node_modules/
+*-debug.log
+.firebase/
+
+# --- OS ---
+.DS_Store
+Thumbs.db

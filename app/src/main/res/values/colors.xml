@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#0B6EF3</color>
+    <color name="primary_dark">#083B72</color>
+    <color name="primary_deep">#052B55</color>
+    <color name="primary_soft">#EAF3FF</color>
+    <!-- First stop of drawable/bg_splash; shared by the system splash and splash bars. -->
+    <color name="splash_start">#031F3E</color>
+    <color name="background">#F5F8FC</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="text_primary">#142437</color>
+    <color name="text_secondary">#64748B</color>
+    <color name="text_muted">#94A3B8</color>
+    <color name="success">#16A34A</color>
+    <color name="success_soft">#ECFDF3</color>
+    <color name="warning">#D97706</color>
+    <color name="warning_soft">#FFF7E8</color>
+    <color name="error">#DC2626</color>
+    <color name="error_soft">#FFF0F0</color>
+    <color name="border">#E2E8F0</color>
+    <color name="nav_inactive">#52657A</color>
+    <color name="nav_surface">#FFFFFF</color>
+</resources>

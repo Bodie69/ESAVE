@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Android 12+ always shows a system splash (icon only). Its background matches the start
+         of the branded splash gradient so the hand-off to SplashActivity is seamless. -->
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/bg_splash</item>
+        <item name="android:statusBarColor">@color/splash_start</item>
+        <item name="android:navigationBarColor">@color/splash_start</item>
+        <item name="android:windowSplashScreenBackground">@color/splash_start</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+    </style>
+</resources>

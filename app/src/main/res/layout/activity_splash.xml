@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_splash"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/screen_padding">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/splash_logo"
+            android:layout_height="@dimen/splash_logo"
+            android:contentDescription="@string/cd_rsu_cc_smart_classroom_logo"
+            android:scaleType="centerInside"
+            android:src="@drawable/brand_logo" />
+
+        <ImageView
+            android:layout_width="@dimen/splash_seal"
+            android:layout_height="@dimen/splash_seal"
+            android:layout_marginLeft="16dp"
+            android:contentDescription="@string/cd_rsu_seal"
+            android:scaleType="centerInside"
+            android:src="@drawable/rsu_seal" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:text="@string/rsu_cc_smart_classroom_2"
+        android:textColor="#FFFFFF"
+        android:textSize="@dimen/splash_title_text"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:text="@string/room_205_cajidiocan_campus_nlive_occupan"
+        android:textColor="#DCEFFF"
+        android:textSize="@dimen/splash_subtitle_text" />
+
+    <ProgressBar
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="34dp"
+        android:indeterminateTint="#FFFFFF" />
+</LinearLayout>

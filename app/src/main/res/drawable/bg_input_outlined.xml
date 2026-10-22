@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Material 3 outlined text field. The field container uses addStatesFromChildren, so it
+     takes the focused state from its EditText; MainActivity sets activated to show an error. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_activated="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/error_soft" />
+            <stroke android:width="2dp" android:color="@color/error" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/surface" />
+            <stroke android:width="2dp" android:color="@color/primary" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#FBFDFF" />
+            <stroke android:width="1dp" android:color="#B9C6D6" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+</selector>

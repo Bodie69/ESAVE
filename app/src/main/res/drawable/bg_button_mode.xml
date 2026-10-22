@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- AUTO/MANUAL buttons: the selected (current) mode glows. Every state keeps the same 3dp
+     transparent rim so the button does not change size when the glow turns on. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true" android:state_pressed="true">
+        <layer-list>
+            <item><shape><solid android:color="#330B6EF3"/><corners android:radius="17dp"/></shape></item>
+            <item android:left="3dp" android:top="3dp" android:right="3dp" android:bottom="3dp">
+                <shape><solid android:color="#0755BE"/><stroke android:width="1dp" android:color="#7FB4FF"/><corners android:radius="14dp"/></shape>
+            </item>
+        </layer-list>
+    </item>
+    <item android:state_selected="true">
+        <layer-list>
+            <item><shape><solid android:color="#260B6EF3"/><corners android:radius="17dp"/></shape></item>
+            <item android:left="1.5dp" android:top="1.5dp" android:right="1.5dp" android:bottom="1.5dp">
+                <shape><solid android:color="#4D0B6EF3"/><corners android:radius="15.5dp"/></shape>
+            </item>
+            <item android:left="3dp" android:top="3dp" android:right="3dp" android:bottom="3dp">
+                <shape><solid android:color="#0B6EF3"/><stroke android:width="1dp" android:color="#7FB4FF"/><corners android:radius="14dp"/></shape>
+            </item>
+        </layer-list>
+    </item>
+    <item android:state_pressed="true">
+        <layer-list>
+            <item android:left="3dp" android:top="3dp" android:right="3dp" android:bottom="3dp">
+                <shape><solid android:color="#DDEBFF"/><stroke android:width="1dp" android:color="#0B6EF3"/><corners android:radius="14dp"/></shape>
+            </item>
+        </layer-list>
+    </item>
+    <item>
+        <layer-list>
+            <item android:left="3dp" android:top="3dp" android:right="3dp" android:bottom="3dp">
+                <shape><solid android:color="#F5F9FF"/><stroke android:width="1dp" android:color="#A9CCFF"/><corners android:radius="14dp"/></shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>

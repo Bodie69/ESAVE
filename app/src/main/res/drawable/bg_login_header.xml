@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Login header: the app-bar blues as a diagonal gradient, rounded to match the sheet. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <gradient android:angle="315" android:startColor="#052B55" android:centerColor="#07579E" android:endColor="#0B6EF3" />
+    <corners android:topLeftRadius="28dp" android:topRightRadius="28dp" android:bottomLeftRadius="0dp" android:bottomRightRadius="0dp" />
+</shape>

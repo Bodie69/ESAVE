@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fan at full speed: each blade trails two fading ghost copies (motion blur) over a faint swept
+     disc, so fast rotation reads as smooth instead of flickering. Same geometry/tint as ic_fan. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <path android:strokeColor="#FF000000" android:strokeWidth="0.9" android:strokeAlpha="0.35"
+        android:pathData="M12,1.5a10.5,10.5 0 1,1 0,21a10.5,10.5 0 1,1 0,-21z" />
+    <path android:fillColor="#FF000000" android:fillAlpha="0.08"
+        android:pathData="M12,3a9,9 0 1,1 0,18a9,9 0 1,1 0,-18z" />
+    <group android:pivotX="12" android:pivotY="12" android:rotation="-32">
+        <path android:fillColor="#FF000000" android:fillAlpha="0.18" android:pathData="M12,12C10.2,9.4 9.6,4.6 12.4,3C15.2,3.6 14.6,9 12,12z" />
+    </group>
+    <group android:pivotX="12" android:pivotY="12" android:rotation="-16">
+        <path android:fillColor="#FF000000" android:fillAlpha="0.4" android:pathData="M12,12C10.2,9.4 9.6,4.6 12.4,3C15.2,3.6 14.6,9 12,12z" />
+    </group>
+    <group android:pivotX="12" android:pivotY="12" android:rotation="0">
+        <path android:fillColor="#FF000000" android:fillAlpha="1" android:pathData="M12,12C10.2,9.4 9.6,4.6 12.4,3C15.2,3.6 14.6,9 12,12z" />
+    </group>
+    <group android:pivotX="12" android:pivotY="12" android:rotation="88">
+        <path android:fillColor="#FF000000" android:fillAlpha="0.18" android:pathData="M12,12C10.2,9.4 9.6,4.6 12.4,3C15.2,3.6 14.6,9 12,12z" />
+    </group>
+    <group android:pivotX="12" android:pivotY="12" android:rotation="104">
+        <path android:fillColor="#FF000000" android:fillAlpha="0.4" android:pathData="M12,12C10.2,9.4 9.6,4.6 12.4,3C15.2,3.6 14.6,9 12,12z" />
+    </group>
+    <group android:pivotX="12" android:pivotY="12" android:rotation="120">
+        <path android:fillColor="#FF000000" android:fillAlpha="1" android:pathData="M12,12C10.2,9.4 9.6,4.6 12.4,3C15.2,3.6 14.6,9 12,12z" />
+    </group>
+    <group android:pivotX="12" android:pivotY="12" android:rotation="208">
+        <path android:fillColor="#FF000000" android:fillAlpha="0.18" android:pathData="M12,12C10.2,9.4 9.6,4.6 12.4,3C15.2,3.6 14.6,9 12,12z" />
+    </group>
+    <group android:pivotX="12" android:pivotY="12" android:rotation="224">
+        <path android:fillColor="#FF000000" android:fillAlpha="0.4" android:pathData="M12,12C10.2,9.4 9.6,4.6 12.4,3C15.2,3.6 14.6,9 12,12z" />
+    </group>
+    <group android:pivotX="12" android:pivotY="12" android:rotation="240">
+        <path android:fillColor="#FF000000" android:fillAlpha="1" android:pathData="M12,12C10.2,9.4 9.6,4.6 12.4,3C15.2,3.6 14.6,9 12,12z" />
+    </group>
+    <path android:fillColor="#FF000000"
+        android:pathData="M12,10.1a1.9,1.9 0 1,1 0,3.8a1.9,1.9 0 1,1 0,-3.8z" />
+</vector>

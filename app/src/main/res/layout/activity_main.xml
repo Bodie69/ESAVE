@@ -1,0 +1,815 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <!-- Main app content with permanent auto-fit bottom navigation. -->
+    <LinearLayout
+        android:id="@+id/mainContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <!-- Compact branded app bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/header_min_height"
+        android:background="@drawable/bg_header"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/screen_padding"
+        android:paddingTop="6dp"
+        android:paddingRight="@dimen/screen_padding"
+        android:paddingBottom="6dp">
+
+        <ImageView
+            android:layout_width="@dimen/header_logo"
+            android:layout_height="@dimen/header_logo"
+            android:contentDescription="@string/cd_rsu_cc_smart_classroom_logo"
+            android:scaleType="centerInside"
+            android:src="@drawable/brand_logo" />
+
+        <ImageView
+            android:layout_width="@dimen/header_seal"
+            android:layout_height="@dimen/header_seal"
+            android:layout_marginLeft="6dp"
+            android:contentDescription="@string/cd_rsu_seal"
+            android:scaleType="centerInside"
+            android:src="@drawable/rsu_seal" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@string/rsu_cc_smart_classroom"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/header_title_text"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:autoSizeMaxTextSize="@dimen/header_subtitle_text"
+                android:autoSizeMinTextSize="8sp"
+                android:autoSizeStepGranularity="0.5sp"
+                android:autoSizeTextType="uniform"
+                android:maxLines="1"
+                android:text="@string/room_205_cajidiocan_campus"
+                android:textColor="#DCEFFF"
+                android:textSize="@dimen/header_subtitle_text" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtHeaderMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:maxLines="1"
+            android:background="@drawable/bg_status_dark"
+            android:text="@string/syncing"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/screenHost"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- DASHBOARD -->
+        <ScrollView
+            android:id="@+id/screenDashboard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/screen_padding">
+
+                <TextView
+                    style="@style/ScreenTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/smart_classroom_overview" />
+
+                <TextView
+                    style="@style/BodyText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/live_occupancy_energy_devices_and_contro" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    style="@style/HeroCard"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="2dp"
+                        android:text="@string/hint_hero"
+                        android:textColor="#B9DAFF"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txtDeviceStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/waiting_for_controller"
+                        android:textColor="#FFFFFF"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtTransportStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/firebase_checking_session"
+                        android:textColor="#DCEFFF"
+                        android:textSize="13sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txtDashboardMode"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/mode"
+                            android:textColor="#FFFFFF"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/txtDashboardUpdated"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:gravity="end"
+                            android:textAlignment="viewEnd"
+                            android:text="@string/updated"
+                            android:textColor="#DCEFFF"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="6dp"
+                        android:layout_weight="1"
+                        android:minHeight="@dimen/metric_card_min_height"
+                        style="@style/MetricCard"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:contentDescription="@string/cd_occupancy"
+                            android:src="@drawable/feature_people" />
+
+                        <TextView
+                            android:id="@+id/txtPeople"
+                            style="@style/MetricValue"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="@string/placeholder" />
+
+                        <TextView
+                            style="@style/FieldLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/occupants" />
+
+                        <TextView style="@style/CardHint" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/hint_people" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="6dp"
+                        android:layout_weight="1"
+                        android:minHeight="@dimen/metric_card_min_height"
+                        style="@style/MetricCard"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:contentDescription="@string/cd_power"
+                            android:src="@drawable/feature_energy" />
+
+                        <TextView
+                            android:id="@+id/txtDashboardPower"
+                            style="@style/MetricValue"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="@string/w" />
+
+                        <TextView
+                            style="@style/FieldLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/live_power" />
+
+                        <TextView style="@style/CardHint" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/hint_power" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="6dp"
+                        android:layout_weight="1"
+                        android:minHeight="@dimen/metric_card_min_height"
+                        style="@style/MetricCard"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:contentDescription="@string/cd_energy"
+                            android:src="@drawable/feature_eco" />
+
+                        <TextView
+                            android:id="@+id/txtDashboardEnergy"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="@string/kwh"
+                            android:textColor="@color/text_primary"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            style="@style/FieldLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/cumulative_energy" />
+
+                        <TextView style="@style/CardHint" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/hint_energy" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="6dp"
+                        android:layout_weight="1"
+                        android:minHeight="@dimen/metric_card_min_height"
+                        style="@style/MetricCard"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:contentDescription="@string/cd_devices"
+                            android:src="@drawable/feature_light" />
+
+                        <TextView
+                            android:id="@+id/txtDashboardRelaySummary"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="@string/devices"
+                            android:textColor="@color/text_primary"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            style="@style/FieldLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/loads_active" />
+
+                        <TextView style="@style/CardHint" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/hint_loads" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txtDashboardAlert"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_notice_warning"
+                    android:text="@string/waiting_for_the_first_controller_state"
+                    android:textColor="@color/text_primary"
+                    android:textSize="13sp" />
+
+                <TextView
+                    style="@style/SectionTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/quick_actions" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/btnDashboardAuto"
+                        style="@style/ActionMode"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:text="@string/auto" />
+
+                    <TextView
+                        android:id="@+id/btnDashboardManual"
+                        style="@style/ActionMode"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:text="@string/manual" />
+
+                    <TextView
+                        android:id="@+id/btnDashboardAllOff"
+                        style="@style/ActionAllOff"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:text="@string/all_off" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/btnDashboardRefresh"
+                    style="@style/ActionSecondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="@string/refresh_live_state" />
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- DEVICES -->
+        <ScrollView
+            android:id="@+id/screenDevices"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/screen_padding">
+
+                <TextView style="@style/ScreenTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/devices_automation" />
+                <TextView style="@style/BodyText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:text="@string/control_the_6_classroom_load_channels_us" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    style="@style/Card"
+                    android:orientation="vertical">
+
+                    <TextView style="@style/SectionTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/operating_mode" />
+                    <TextView style="@style/CardHint" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/hint_mode" />
+                    <TextView android:id="@+id/txtMode" style="@style/BodyText" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:text="@string/operating_mode_2" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:gravity="center_vertical" android:orientation="horizontal">
+                        <TextView android:id="@+id/btnAuto" style="@style/ActionMode" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginRight="5dp" android:layout_weight="1" android:clickable="true" android:focusable="true" android:text="@string/auto" />
+                        <TextView android:id="@+id/btnManual" style="@style/ActionMode" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginLeft="5dp" android:layout_marginRight="5dp" android:layout_weight="1" android:clickable="true" android:focusable="true" android:text="@string/manual" />
+                        <TextView android:id="@+id/btnAllOff" style="@style/ActionAllOff" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginLeft="5dp" android:layout_weight="1" android:clickable="true" android:focusable="true" android:text="@string/all_off" />
+                    </LinearLayout>
+
+                    <TextView android:id="@+id/txtManualHint" style="@style/BodyText" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:text="@string/ch1_ch6_are_controlled_automatically_in" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:minHeight="@dimen/relay_card_min_height"
+                    style="@style/Card"
+                    android:clipChildren="false"
+                    android:orientation="vertical">
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal">
+                        <ImageView android:layout_width="38dp" android:layout_height="38dp" android:contentDescription="@string/cd_lights" android:src="@drawable/feature_light" />
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_weight="1" android:orientation="vertical">
+                            <TextView style="@style/SectionTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/lighting" />
+                            <TextView style="@style/CardHint" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/hint_lighting" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:clipChildren="false" android:orientation="horizontal">
+                        <LinearLayout android:id="@+id/tileLight1" style="@style/RelayTile" android:clipChildren="false">
+                            <FrameLayout android:layout_width="@dimen/relay_bulb" android:layout_height="@dimen/relay_bulb" android:clipChildren="false">
+                                <View android:id="@+id/glowLight1" android:layout_width="@dimen/relay_glow" android:layout_height="@dimen/relay_glow" android:layout_gravity="center" android:background="@drawable/bg_bulb_glow" />
+                                <ImageView android:id="@+id/imgLight1" style="@style/RelayIconBulb" android:src="@drawable/ic_bulb_off" />
+                            </FrameLayout>
+                            <TextView style="@style/RelayLabel" android:text="@string/ch1_light_1" />
+                        </LinearLayout>
+                        <LinearLayout android:id="@+id/tileLight2" style="@style/RelayTile" android:clipChildren="false">
+                            <FrameLayout android:layout_width="@dimen/relay_bulb" android:layout_height="@dimen/relay_bulb" android:clipChildren="false">
+                                <View android:id="@+id/glowLight2" android:layout_width="@dimen/relay_glow" android:layout_height="@dimen/relay_glow" android:layout_gravity="center" android:background="@drawable/bg_bulb_glow" />
+                                <ImageView android:id="@+id/imgLight2" style="@style/RelayIconBulb" android:src="@drawable/ic_bulb_off" />
+                            </FrameLayout>
+                            <TextView style="@style/RelayLabel" android:text="@string/ch2_light_2" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:clipChildren="false" android:orientation="horizontal">
+                        <LinearLayout android:id="@+id/tileLight3" style="@style/RelayTile" android:clipChildren="false">
+                            <FrameLayout android:layout_width="@dimen/relay_bulb" android:layout_height="@dimen/relay_bulb" android:clipChildren="false">
+                                <View android:id="@+id/glowLight3" android:layout_width="@dimen/relay_glow" android:layout_height="@dimen/relay_glow" android:layout_gravity="center" android:background="@drawable/bg_bulb_glow" />
+                                <ImageView android:id="@+id/imgLight3" style="@style/RelayIconBulb" android:src="@drawable/ic_bulb_off" />
+                            </FrameLayout>
+                            <TextView style="@style/RelayLabel" android:text="@string/ch3_light_3" />
+                        </LinearLayout>
+                        <LinearLayout android:id="@+id/tileLight4" style="@style/RelayTile" android:clipChildren="false">
+                            <FrameLayout android:layout_width="@dimen/relay_bulb" android:layout_height="@dimen/relay_bulb" android:clipChildren="false">
+                                <View android:id="@+id/glowLight4" android:layout_width="@dimen/relay_glow" android:layout_height="@dimen/relay_glow" android:layout_gravity="center" android:background="@drawable/bg_bulb_glow" />
+                                <ImageView android:id="@+id/imgLight4" style="@style/RelayIconBulb" android:src="@drawable/ic_bulb_off" />
+                            </FrameLayout>
+                            <TextView style="@style/RelayLabel" android:text="@string/ch4_light_4" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:minHeight="@dimen/relay_card_min_height"
+                    style="@style/Card"
+                    android:orientation="vertical">
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal">
+                        <ImageView android:layout_width="38dp" android:layout_height="38dp" android:contentDescription="@string/cd_fans" android:src="@drawable/feature_fan" />
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_weight="1" android:orientation="vertical">
+                            <TextView style="@style/SectionTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/fans" />
+                            <TextView style="@style/CardHint" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/hint_fans" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_marginTop="12dp" android:layout_weight="1" android:gravity="center_vertical" android:orientation="horizontal">
+                        <LinearLayout android:id="@+id/tileFan1" style="@style/RelayTile">
+                            <ImageView android:id="@+id/imgFan1" style="@style/RelayIconFan" android:src="@drawable/ic_fan" android:tint="@color/primary" />
+                            <TextView style="@style/RelayLabel" android:text="@string/ch5_fan_1" />
+                        </LinearLayout>
+                        <LinearLayout android:id="@+id/tileFan2" style="@style/RelayTile">
+                            <ImageView android:id="@+id/imgFan2" style="@style/RelayIconFan" android:src="@drawable/ic_fan" android:tint="@color/primary" />
+                            <TextView style="@style/RelayLabel" android:text="@string/ch6_fan_2" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView android:id="@+id/txtRelaySummary" style="@style/BodyText" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="@string/n_0_6_channels_active" />
+                    <TextView android:id="@+id/txtLastSource" style="@style/BodyText" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:text="@string/last_control_source" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- ENERGY -->
+        <ScrollView
+            android:id="@+id/screenEnergy"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/screen_padding">
+
+                <TextView style="@style/ScreenTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/energy_monitor" />
+                <TextView style="@style/BodyText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:text="@string/validated_direct_pzem_004t_readings_from" />
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:orientation="horizontal">
+                    <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_marginRight="6dp" android:layout_weight="1" android:minHeight="@dimen/metric_card_min_height_compact" style="@style/MetricCard" android:orientation="vertical">
+                        <TextView style="@style/FieldLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/voltage" />
+                        <TextView android:id="@+id/txtVoltage" style="@style/MetricValue" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/v" />
+                        <TextView style="@style/CardHint" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/hint_voltage" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_marginLeft="6dp" android:layout_weight="1" android:minHeight="@dimen/metric_card_min_height_compact" style="@style/MetricCard" android:orientation="vertical">
+                        <TextView style="@style/FieldLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/current" />
+                        <TextView android:id="@+id/txtCurrent" style="@style/MetricValue" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/a" />
+                        <TextView style="@style/CardHint" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/hint_current" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
+                    <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_marginRight="6dp" android:layout_weight="1" android:minHeight="@dimen/metric_card_min_height_compact" style="@style/MetricCard" android:orientation="vertical">
+                        <TextView style="@style/FieldLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/power" />
+                        <TextView android:id="@+id/txtPower" style="@style/MetricValue" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/w" />
+                        <TextView style="@style/CardHint" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/hint_power_now" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_marginLeft="6dp" android:layout_weight="1" android:minHeight="@dimen/metric_card_min_height_compact" style="@style/MetricCard" android:orientation="vertical">
+                        <TextView style="@style/FieldLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/cumulative_energy_2" />
+                        <TextView android:id="@+id/txtEnergy" style="@style/MetricValue" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/kwh" />
+                        <TextView style="@style/CardHint" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/hint_energy_total" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" style="@style/Card" android:orientation="vertical">
+                    <TextView style="@style/SectionTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/live_power_trend" />
+                    <TextView style="@style/CardHint" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/hint_trend" />
+                    <TextView android:id="@+id/txtEnergyFreshness" style="@style/BodyText" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/waiting_for_a_fresh_validated_pzem_sampl" />
+                    <ph.edu.rsu.cajidiocan.smartclassroom.EnergyChartView
+                        android:id="@+id/energyChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/chart_height"
+                        android:layout_marginTop="10dp" />
+                    <TextView android:id="@+id/txtFrequencyPf" style="@style/BodyText" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="@string/frequency_hz_pf" />
+                </LinearLayout>
+
+                <TextView android:id="@+id/btnResetEnergy" style="@style/ActionDanger" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:clickable="true" android:focusable="true" android:text="@string/reset_cumulative_pzem_kwh" />
+            </LinearLayout>
+        </ScrollView>
+
+
+        <!-- SETTINGS -->
+        <ScrollView
+            android:id="@+id/screenSettings"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:visibility="gone">
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="@dimen/screen_padding">
+                <TextView style="@style/ScreenTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/settings_connection" />
+                <TextView style="@style/BodyText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:text="@string/choose_online_firebase_control_or_direct" />
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" style="@style/Card" android:orientation="vertical">
+                    <TextView style="@style/SectionTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/connection_mode" />
+                    <TextView style="@style/CardHint" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/hint_connection" />
+                    <RadioGroup android:id="@+id/transportGroup" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:orientation="vertical">
+                        <RadioButton android:id="@+id/radioFirebase" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="48dp" android:checked="true" android:text="@string/firebase_online_rtdb" android:textColor="@color/text_primary" />
+                        <RadioButton android:id="@+id/radioBluetooth" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="48dp" android:text="@string/bluetooth_local_direct_esp32" android:textColor="@color/text_primary" />
+                    </RadioGroup>
+                    <TextView android:id="@+id/txtSettingsTransportStatus" style="@style/BodyText" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/checking_connection" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" style="@style/Card" android:orientation="vertical">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal">
+                        <ImageView android:layout_width="36dp" android:layout_height="36dp" android:contentDescription="@string/cd_cloud" android:src="@drawable/feature_cloud" />
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_weight="1" android:orientation="vertical">
+                            <TextView style="@style/SectionTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/firebase" />
+                            <TextView style="@style/CardHint" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/hint_firebase" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <TextView android:id="@+id/btnFirebaseLogin" style="@style/ActionPrimary" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:clickable="true" android:focusable="true" android:text="@string/firebase_login" />
+                    <TextView android:id="@+id/btnFirebaseLogout" style="@style/ActionSecondary" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:clickable="true" android:focusable="true" android:text="@string/sign_out_firebase_session" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" style="@style/Card" android:orientation="vertical">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal">
+                        <ImageView android:layout_width="36dp" android:layout_height="36dp" android:contentDescription="@string/cd_bluetooth_controller" android:src="@drawable/feature_chip" />
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_weight="1" android:orientation="vertical">
+                            <TextView style="@style/SectionTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/local_bluetooth_esp32" />
+                            <TextView style="@style/CardHint" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/hint_bluetooth" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <TextView android:id="@+id/btnBluetoothConnect" style="@style/ActionPrimary" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:clickable="true" android:focusable="true" android:text="@string/connect_paired_esp32" />
+                    <TextView android:id="@+id/btnBluetoothDisconnect" style="@style/ActionSecondary" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:clickable="true" android:focusable="true" android:text="@string/disconnect_bluetooth" />
+                    <TextView android:id="@+id/btnBluetoothSettings" style="@style/ActionSecondary" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:clickable="true" android:focusable="true" android:text="@string/open_bluetooth_settings_pair" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" style="@style/Card" android:orientation="vertical">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal">
+                        <ImageView android:layout_width="36dp" android:layout_height="36dp" android:contentDescription="@string/controller_wifi" android:src="@drawable/feature_cloud" />
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_weight="1" android:orientation="vertical">
+                            <TextView style="@style/SectionTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/controller_wifi" />
+                            <TextView style="@style/CardHint" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/hint_wifi" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <TextView android:id="@+id/txtWifiSetupStatus" style="@style/BodyText" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:text="@string/controller_wifi_waiting" android:textColor="@color/text_primary" />
+                    <TextView android:id="@+id/btnWifiSetup" style="@style/ActionSecondary" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:clickable="true" android:focusable="true" android:text="@string/open_wifi_setup" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" style="@style/Card" android:orientation="vertical">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal">
+                        <ImageView android:layout_width="36dp" android:layout_height="36dp" android:contentDescription="@string/cd_occupancy_sensors" android:src="@drawable/feature_motion" />
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_weight="1" android:orientation="vertical">
+                            <TextView style="@style/SectionTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/occupancy_sensors_entrance_exit" />
+                            <TextView style="@style/CardHint" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/hint_sensors" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <TextView android:id="@+id/txtBeams" style="@style/BodyText" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:text="@string/entrance_exit" />
+                    <TextView android:id="@+id/txtOccupancyValidity" style="@style/BodyText" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/count_status" />
+                    <TextView android:id="@+id/txtSensorQuality" style="@style/BodyText" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/detection_quality_waiting_for_controller" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:orientation="horizontal">
+                        <TextView android:id="@+id/btnCorrectCount" style="@style/ActionSecondary" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginRight="5dp" android:layout_weight="1" android:clickable="true" android:focusable="true" android:text="@string/correct_count" />
+                        <TextView android:id="@+id/btnCalibrateIr" style="@style/ActionSecondary" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginLeft="5dp" android:layout_weight="1" android:clickable="true" android:focusable="true" android:text="@string/calibrate_ir" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- ACCOUNT / SYSTEM -->
+        <ScrollView
+            android:id="@+id/screenAccount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:visibility="gone">
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="@dimen/screen_padding">
+                <TextView style="@style/ScreenTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/account_system" />
+                <TextView style="@style/BodyText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:text="@string/controller_diagnostics_app_configuration" />
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" style="@style/Card" android:orientation="vertical">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal">
+                        <ImageView android:layout_width="52dp" android:layout_height="52dp" android:contentDescription="@string/cd_rsu_cc_logo" android:src="@drawable/brand_logo" />
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginLeft="12dp" android:layout_weight="1" android:orientation="vertical">
+                            <TextView style="@style/SectionTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/room_205_controller" />
+                            <TextView style="@style/CardHint" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/hint_controller" />
+                            <TextView android:id="@+id/txtAppVersion" style="@style/BodyText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/app_version" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" style="@style/Card" android:orientation="vertical">
+                    <TextView style="@style/SectionTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/connectivity" />
+                    <TextView style="@style/CardHint" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/hint_connectivity" />
+                    <TextView android:id="@+id/txtConnectivity" style="@style/BodyText" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="@string/wi_fi_firebase_bluetooth" />
+                    <TextView android:id="@+id/txtDiagnostics" style="@style/BodyText" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:text="@string/ip_uptime_heap" />
+                    <TextView android:id="@+id/txtSystemFirebase" style="@style/BodyText" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:text="@string/firebase_session" />
+                    <TextView android:id="@+id/txtSystemBluetooth" style="@style/BodyText" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:text="@string/bluetooth_link" />
+                </LinearLayout>
+
+                <TextView android:id="@+id/btnSystemRefresh" style="@style/ActionPrimary" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:clickable="true" android:focusable="true" android:text="@string/refresh_controller_state" />
+                <TextView android:id="@+id/btnCopyDiagnostics" style="@style/ActionSecondary" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:clickable="true" android:focusable="true" android:text="@string/copy_diagnostics" />
+                <TextView android:id="@+id/btnOpenAppSettings" style="@style/ActionSecondary" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:clickable="true" android:focusable="true" android:text="@string/open_android_app_settings" />
+
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:background="@drawable/bg_notice_success" android:text="@string/designed_for_the_rsu_cc_smart_classroom" android:textColor="@color/text_primary" android:textSize="13sp" />
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
+
+    <!-- Global command/connection feedback -->
+    <TextView
+        android:id="@+id/txtMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/bg_message"
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:text="@string/ready"
+        android:textColor="@color/text_secondary"
+        android:textSize="12sp" />
+    <!-- Permanent bottom navigation. Five equal-width tabs auto-fit the full screen. -->
+    <LinearLayout
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/nav_min_height"
+        android:background="@drawable/bg_nav"
+        android:elevation="12dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="2dp"
+        android:paddingTop="4dp"
+        android:paddingRight="2dp"
+        android:paddingBottom="4dp">
+
+        <LinearLayout
+            android:id="@+id/navDashboard"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_nav_item_active"
+            android:clickable="true"
+            android:contentDescription="@string/cd_home_navigation_item"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp">
+            <ImageView android:id="@+id/imgNavDashboard" android:layout_width="@dimen/nav_icon" android:layout_height="@dimen/nav_icon" android:clickable="false" android:contentDescription="@string/cd_home_icon" android:focusable="false" android:scaleType="centerInside" android:src="@drawable/nav_home_active" />
+            <TextView android:id="@+id/lblNavDashboard" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:ellipsize="end" android:gravity="center" android:maxLines="1" android:text="@string/home" android:textColor="@color/primary" android:textSize="@dimen/nav_label_text" android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navDevices"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_nav_item_touch"
+            android:clickable="true"
+            android:contentDescription="@string/cd_devices_navigation_item"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp">
+            <ImageView android:id="@+id/imgNavDevices" android:layout_width="@dimen/nav_icon" android:layout_height="@dimen/nav_icon" android:clickable="false" android:contentDescription="@string/cd_devices_icon" android:focusable="false" android:scaleType="centerInside" android:src="@drawable/nav_devices_inactive" />
+            <TextView android:id="@+id/lblNavDevices" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:ellipsize="end" android:gravity="center" android:maxLines="1" android:text="@string/devices_2" android:textColor="@color/nav_inactive" android:textSize="@dimen/nav_label_text" android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navEnergy"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_nav_item_touch"
+            android:clickable="true"
+            android:contentDescription="@string/cd_energy_navigation_item"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp">
+            <ImageView android:id="@+id/imgNavEnergy" android:layout_width="@dimen/nav_icon" android:layout_height="@dimen/nav_icon" android:clickable="false" android:contentDescription="@string/cd_energy_icon" android:focusable="false" android:scaleType="centerInside" android:src="@drawable/nav_energy_inactive" />
+            <TextView android:id="@+id/lblNavEnergy" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:ellipsize="end" android:gravity="center" android:maxLines="1" android:text="@string/energy" android:textColor="@color/nav_inactive" android:textSize="@dimen/nav_label_text" android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navSettings"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_nav_item_touch"
+            android:clickable="true"
+            android:contentDescription="@string/cd_settings_navigation_item"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp">
+            <ImageView android:id="@+id/imgNavSettings" android:layout_width="@dimen/nav_icon" android:layout_height="@dimen/nav_icon" android:clickable="false" android:contentDescription="@string/cd_settings_icon" android:focusable="false" android:scaleType="centerInside" android:src="@drawable/nav_settings_inactive" />
+            <TextView android:id="@+id/lblNavSettings" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:ellipsize="end" android:gravity="center" android:maxLines="1" android:text="@string/settings" android:textColor="@color/nav_inactive" android:textSize="@dimen/nav_label_text" android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navAccount"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_nav_item_touch"
+            android:clickable="true"
+            android:contentDescription="@string/cd_system_navigation_item"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp">
+            <ImageView android:id="@+id/imgNavAccount" android:layout_width="@dimen/nav_icon" android:layout_height="@dimen/nav_icon" android:clickable="false" android:contentDescription="@string/cd_system_icon" android:focusable="false" android:scaleType="centerInside" android:src="@drawable/nav_account_inactive" />
+            <TextView android:id="@+id/lblNavAccount" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:ellipsize="end" android:gravity="center" android:maxLines="1" android:text="@string/system" android:textColor="@color/nav_inactive" android:textSize="@dimen/nav_label_text" android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

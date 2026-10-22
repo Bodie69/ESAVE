@@ -1,0 +1,74 @@
+plugins {
+    id 'com.android.application'
+}
+
+// Per-installation settings live outside version control: local.properties (git-ignored) or
+// environment variables (e.g. RSU_FIREBASE_API_KEY for CI). See README.md.
+def localProps = new Properties()
+def localPropsFile = rootProject.file('local.properties')
+if (localPropsFile.exists()) localPropsFile.withInputStream { localProps.load(it) }
+def projectSetting = { String key, String fallback = null ->
+    def value = localProps.getProperty(key) ?: System.getenv(key.toUpperCase().replace('.', '_')) ?: fallback
+    if (value == null) throw new GradleException("Missing '${key}': add it to local.properties (see README.md).")
+    return value
+}
+
+// Release signing is optional: without keystore.properties, assembleRelease builds an unsigned APK.
+def keystoreProps = new Properties()
+def keystorePropsFile = rootProject.file('keystore.properties')
+if (keystorePropsFile.exists()) keystorePropsFile.withInputStream { keystoreProps.load(it) }
+
+android {
+    namespace 'ph.edu.rsu.cajidiocan.smartclassroom'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'ph.edu.rsu.cajidiocan.smartclassroom'
+        minSdk 26
+        targetSdk 35
+        versionCode 50
+        versionName '26.24'
+
+        buildConfigField 'String', 'FIREBASE_API_KEY', "\"${projectSetting('rsu.firebaseApiKey')}\""
+        buildConfigField 'String', 'FIREBASE_DATABASE_URL', "\"${projectSetting('rsu.firebaseDatabaseUrl')}\""
+        buildConfigField 'String', 'ROOM_ID', '"room206"'
+        buildConfigField 'String', 'BLUETOOTH_DEVICE_NAME', '"ESAVE-Room206"'
+        // Optional: shown in the app as a pairing hint. Leave unset to keep the PIN off phones.
+        buildConfigField 'String', 'BLUETOOTH_PAIRING_PIN', "\"${projectSetting('rsu.bluetoothPin', '')}\""
+    }
+
+    signingConfigs {
+        if (keystorePropsFile.exists()) {
+            release {
+                storeFile rootProject.file(keystoreProps['storeFile'])
+                storePassword keystoreProps['storePassword']
+                keyAlias keystoreProps['keyAlias']
+                keyPassword keystoreProps['keyPassword']
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            if (keystorePropsFile.exists()) signingConfig signingConfigs.release
+        }
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+    // Real org.json for JVM unit tests (android.jar only ships stubs).
+    testImplementation 'org.json:json:20180813'
+}

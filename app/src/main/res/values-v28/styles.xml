@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Android 9+: blue-tinted card shadows. Same as values/styles.xml plus the shadow colors. -->
+    <style name="Card">
+        <item name="android:background">@drawable/bg_card</item>
+        <item name="android:elevation">6dp</item>
+        <item name="android:outlineAmbientShadowColor">#330B3F80</item>
+        <item name="android:outlineSpotShadowColor">#4D0B3F80</item>
+    </style>
+
+    <style name="HeroCard" parent="Card">
+        <item name="android:background">@drawable/bg_card_blue</item>
+        <item name="android:elevation">10dp</item>
+        <item name="android:outlineSpotShadowColor">#990B6EF3</item>
+    </style>
+</resources>

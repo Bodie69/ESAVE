@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gradient pill button with a Material ripple; greyed out while disabled (signing in). -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android" android:color="#40FFFFFF">
+    <item>
+        <selector>
+            <item android:state_enabled="false">
+                <shape android:shape="rectangle">
+                    <gradient android:angle="0" android:startColor="#7C8EA6" android:endColor="#A7B6C9" />
+                    <corners android:radius="26dp" />
+                </shape>
+            </item>
+            <item>
+                <shape android:shape="rectangle">
+                    <gradient android:angle="0" android:startColor="#083B72" android:centerColor="#07579E" android:endColor="#0B6EF3" />
+                    <corners android:radius="26dp" />
+                </shape>
+            </item>
+        </selector>
+    </item>
+</ripple>

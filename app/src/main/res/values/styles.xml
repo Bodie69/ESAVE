@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:colorAccent">@color/primary</item>
+        <item name="android:navigationBarColor">@color/surface</item>
+        <item name="android:statusBarColor">@color/primary_deep</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/background</item>
+    </style>
+
+    <!-- Launch activity theme: the window starts as the splash gradient so the branded splash
+         appears without a white flash. values-v31 adds the Android 12+ system splash styling. -->
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/bg_splash</item>
+        <item name="android:statusBarColor">@color/splash_start</item>
+        <item name="android:navigationBarColor">@color/splash_start</item>
+    </style>
+
+    <style name="ScreenTitle">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="SectionTitle">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="BodyText">
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!-- Raised surfaces. Elevation draws the shadow; values-v28 tints it blue on Android 9+. -->
+    <style name="Card">
+        <item name="android:background">@drawable/bg_card</item>
+        <item name="android:elevation">6dp</item>
+    </style>
+
+    <style name="MetricCard" parent="Card">
+        <item name="android:background">@drawable/bg_metric</item>
+        <item name="android:elevation">4dp</item>
+    </style>
+
+    <style name="HeroCard" parent="Card">
+        <item name="android:background">@drawable/bg_card_blue</item>
+        <item name="android:elevation">10dp</item>
+    </style>
+
+    <!-- One short line describing a card, under its title or value. -->
+    <style name="CardHint">
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:layout_marginTop">2dp</item>
+    </style>
+
+    <!-- Tappable bulb / fan tile on the Devices screen. -->
+    <style name="RelayTile">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <style name="RelayIcon">
+        <!-- The 8dp padding leaves room for the glow. Sizes per screen class are in dimens.xml. -->
+        <item name="android:layout_width">@dimen/relay_bulb</item>
+        <item name="android:layout_height">@dimen/relay_bulb</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:importantForAccessibility">no</item>
+    </style>
+
+    <!-- Bulbs sit two per row (2x2 grid), half width each, with the relay_glow behind them. -->
+    <style name="RelayIconBulb" parent="RelayIcon">
+        <item name="android:layout_width">@dimen/relay_bulb</item>
+        <item name="android:layout_height">@dimen/relay_bulb</item>
+    </style>
+
+    <!-- Two fans share a row (half width each), so they can be much larger than the bulbs. -->
+    <style name="RelayIconFan" parent="RelayIcon">
+        <item name="android:layout_width">@dimen/relay_fan</item>
+        <item name="android:layout_height">@dimen/relay_fan</item>
+    </style>
+
+    <style name="RelayLabel">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textSize">@dimen/relay_label_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Small caption above a value inside a card. -->
+    <style name="FieldLabel">
+        <item name="android:textColor">@color/text_muted</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="MetricValue">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ActionPrimary">
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:background">@drawable/bg_button_primary</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:minHeight">46dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+    </style>
+
+    <!-- AUTO/MANUAL: glows while selected (the controller's current mode). 52dp = 46dp button
+         plus the 3dp glow rim of bg_button_mode on each side. -->
+    <!-- Three of these share a row, so on narrow screens or with a large system font the
+         one-word label shrinks to fit (down to 9sp) instead of breaking mid-word ("MANU / AL"). -->
+    <style name="ActionMode">
+        <item name="android:maxLines">1</item>
+        <item name="android:autoSizeTextType">uniform</item>
+        <item name="android:autoSizeMinTextSize">9sp</item>
+        <item name="android:autoSizeMaxTextSize">13sp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:background">@drawable/bg_button_mode</item>
+        <item name="android:textColor">@color/text_mode_button</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:minHeight">52dp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+    </style>
+
+    <style name="ActionSecondary">
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:background">@drawable/bg_button_secondary</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:minHeight">46dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+    </style>
+
+    <!-- ALL OFF: glows while every relay is off (bg_button_all_off); same 52dp sizing as ActionMode. -->
+    <style name="ActionAllOff" parent="ActionMode">
+        <item name="android:background">@drawable/bg_button_all_off</item>
+        <item name="android:textColor">@color/text_all_off_button</item>
+    </style>
+
+    <style name="ActionDanger">
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:background">@drawable/bg_button_danger</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:minHeight">46dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+    </style>
+</resources>
