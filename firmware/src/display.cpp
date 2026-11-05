@@ -111,7 +111,7 @@ void updateLcd() {
         line0 = String(voltage, 1) + "V " + String(currentA, 2) + "A";
         line1 = String(powerW, 0) + "W " + String(energyKWh, 2) + "kWh";
       } else {
-        line0 = centered("ROOM 206");
+        line0 = centered(automaticMode ? "MODE: AUTO" : "MODE: MANUAL");
         line1 = "000V | 0.0A";
       }
     } else {

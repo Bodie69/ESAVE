@@ -8,7 +8,7 @@
 // ----------------------------------------------------------------------------- Identity
 
 // Reported to the app as state.schema_version; the app warns when it is older than it expects.
-#define FIRMWARE_VERSION "25.22"
+#define FIRMWARE_VERSION "25.23"
 
 static const char *const DEVICE_ID = "room206-controller";
 static const char *const ROOM_ID = "room206";
