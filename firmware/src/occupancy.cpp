@@ -147,93 +147,62 @@ static uint32_t entranceShortWindow = 0;
 static uint32_t exitShortWindow = 0;
 static unsigned long lastSensorNoiseLogAt = 0;
 
-void calibrateIrSensors(const String &source) {
-  // Run this while both beams are CLEAR. We store the current raw level as CLEAR.
-
-  entranceBeam.clearLevel = digitalRead(ENTRANCE_IR_PIN);
-
-  exitBeam.clearLevel = digitalRead(EXIT_IR_PIN);
-
-  entranceBeam.lastRaw = entranceBeam.stableRaw = entranceBeam.clearLevel;
-
-  exitBeam.lastRaw = exitBeam.stableRaw = exitBeam.clearLevel;
-
-  entranceBeam.broken = false;
-
-  exitBeam.broken = false;
-
-  prefs.putBool("entClear", entranceBeam.clearLevel);
-
-  prefs.putBool("exitClear", exitBeam.clearLevel);
-
-  prefs.putBool("irCal", true);
+// Re-arm both ISR state machines from the current pin levels. Polarity is fixed (NPN NO:
+// LOW = detected), so nothing is learned here.
+static void resetBeamState() {
+  entranceBeam.clearLevel = exitBeam.clearLevel = PROX_CLEAR_LEVEL;
+  entranceBeam.lastRaw = entranceBeam.stableRaw = digitalRead(ENTRANCE_IR_PIN);
+  exitBeam.lastRaw = exitBeam.stableRaw = digitalRead(EXIT_IR_PIN);
+  entranceBeam.broken = entranceBeam.stableRaw == PROX_DETECT_LEVEL;
+  exitBeam.broken = exitBeam.stableRaw == PROX_DETECT_LEVEL;
 
   noInterrupts();
-  entranceClearLevelIsr = entranceBeam.clearLevel;
-  exitClearLevelIsr = exitBeam.clearLevel;
+  entranceClearLevelIsr = exitClearLevelIsr = PROX_CLEAR_LEVEL;
   entrancePendingPassages = 0;
   exitPendingPassages = 0;
   entranceRejectedShortIsr = entranceRejectedLongIsr = 0;
   exitRejectedShortIsr = exitRejectedLongIsr = 0;
   entranceEdgeCountIsr = 0;
   exitEdgeCountIsr = 0;
-  entranceBrokenIsr = false;
-  exitBrokenIsr = false;
-  entranceCountedThisBreak = false;
-  exitCountedThisBreak = false;
+  // A sensor that already detects something at reset is treated as mid-detection and already
+  // counted: it must go clear before the next passage can count.
+  entranceBrokenIsr = entranceBeam.broken;
+  exitBrokenIsr = exitBeam.broken;
+  entranceCountedThisBreak = entranceBeam.broken;
+  exitCountedThisBreak = exitBeam.broken;
   entrancePulseEligible = true;
   exitPulseEligible = true;
-  entranceBreakStartedUs = exitBreakStartedUs = 0;
   uint32_t irNowUs = micros();
+  entranceBreakStartedUs = exitBreakStartedUs = irNowUs;
   entranceLastAcceptedUs = exitLastAcceptedUs = irNowUs;
   entranceLastClearUs = exitLastClearUs = irNowUs - IR_MIN_CLEAR_GAP_US;
   interrupts();
 
+  if (entranceBeam.broken || exitBeam.broken) {
+    Serial.printf("[PROX] WARNING detecting at re-arm: entrance=%s exit=%s. Check for an object/door within range, or OUT shorted to GND\n",
+                  entranceBeam.broken ? "DETECT" : "clear", exitBeam.broken ? "DETECT" : "clear");
+  }
+}
+
+// Kept for the app's CALIBRATE IR command: re-arms the sensors and reports their raw levels.
+void calibrateIrSensors(const String &source) {
+  resetBeamState();
   lastControlSource = source;
   markStateDirty("ir_calibration");
-
-  Serial.printf("[IR] calibrated clear levels: entrance=%d exit=%d\n", entranceBeam.clearLevel, exitBeam.clearLevel);
+  Serial.printf("[PROX] re-armed (fixed NPN NO, LOW=detect): entrance raw=%d exit raw=%d\n",
+                entranceBeam.stableRaw, exitBeam.stableRaw);
 }
 
 void loadIrCalibration() {
-  if (prefs.getBool("irCal", false)) {
-    entranceBeam.clearLevel = prefs.getBool("entClear", HIGH);
-
-    exitBeam.clearLevel = prefs.getBool("exitClear", HIGH);
-  } else {
-    delay(500); // short one-time commissioning sample; keep both beams clear on first boot
-
-    calibrateIrSensors("boot_calibration");
+  // Earlier firmware learned the break-beam clear level and saved it. That value is meaningless
+  // for the NPN NO switch (and could invert it), so drop it once.
+  if (prefs.isKey("irCal")) {
+    prefs.remove("irCal");
+    prefs.remove("entClear");
+    prefs.remove("exitClear");
+    Serial.println("[PROX] removed stale break-beam calibration from NVS");
   }
-
-  entranceBeam.lastRaw = entranceBeam.stableRaw = digitalRead(ENTRANCE_IR_PIN);
-
-  exitBeam.lastRaw = exitBeam.stableRaw = digitalRead(EXIT_IR_PIN);
-
-  entranceBeam.broken = entranceBeam.stableRaw != entranceBeam.clearLevel;
-
-  exitBeam.broken = exitBeam.stableRaw != exitBeam.clearLevel;
-
-  noInterrupts();
-  entranceClearLevelIsr = entranceBeam.clearLevel;
-  exitClearLevelIsr = exitBeam.clearLevel;
-  entrancePendingPassages = 0;
-  exitPendingPassages = 0;
-  entranceRejectedShortIsr = entranceRejectedLongIsr = 0;
-  exitRejectedShortIsr = exitRejectedLongIsr = 0;
-  entranceEdgeCountIsr = 0;
-  exitEdgeCountIsr = 0;
-  entranceBrokenIsr = false;
-  exitBrokenIsr = false;
-  entranceCountedThisBreak = false;
-  exitCountedThisBreak = false;
-  entrancePulseEligible = true;
-  exitPulseEligible = true;
-  entranceBreakStartedUs = exitBreakStartedUs = 0;
-  uint32_t irNowUs = micros();
-  entranceLastAcceptedUs = exitLastAcceptedUs = irNowUs;
-  entranceLastClearUs = exitLastClearUs = irNowUs - IR_MIN_CLEAR_GAP_US;
-  interrupts();
+  resetBeamState();
 }
 
 static bool updateBeam(BeamInput &beam, unsigned long now) {
@@ -333,7 +302,7 @@ void processOccupancy() {
       entranceShortWindow = 0;
       entranceEdgesWindow = 0;
       markStateDirty("entrance_sensor_quiet");
-      Serial.println("[IR] entrance line quiet again; counting unlocked, but reconcile occupancy count once");
+      Serial.println("[PROX] entrance line quiet again; counting unlocked, but reconcile occupancy count once");
     } else if (entered) {
       entranceNoiseRejected += entered;
       entered = 0;
@@ -345,7 +314,7 @@ void processOccupancy() {
       exitShortWindow = 0;
       exitEdgesWindow = 0;
       markStateDirty("exit_sensor_quiet");
-      Serial.println("[IR] exit line quiet again; counting unlocked, but reconcile occupancy count once");
+      Serial.println("[PROX] exit line quiet again; counting unlocked, but reconcile occupancy count once");
     } else if (exited) {
       exitNoiseRejected += exited;
       exited = 0;
@@ -355,7 +324,7 @@ void processOccupancy() {
   if ((entranceSensorNoisy || exitSensorNoisy) &&
       (lastSensorNoiseLogAt == 0 || now - lastSensorNoiseLogAt >= 2000UL)) {
     lastSensorNoiseLogAt = now;
-    Serial.printf("[IR][NOISE] entrance=%s short=%lu edges=%lu exit=%s short=%lu edges=%lu. GPIO23/GPIO32 use INPUT_PULLUP; check sensor OUT/common GND if noise persists.\n",
+    Serial.printf("[PROX][NOISE] entrance=%s short=%lu edges=%lu exit=%s short=%lu edges=%lu. GPIO23/GPIO32 use INPUT_PULLUP; add 4.7k pull-ups to 3.3 V and check sensor 0 V/common GND if noise persists.\n",
                   entranceSensorNoisy ? "NOISY" : "OK", (unsigned long)entranceShortWindow, (unsigned long)entranceEdgesWindow,
                   exitSensorNoisy ? "NOISY" : "OK", (unsigned long)exitShortWindow, (unsigned long)exitEdgesWindow);
   }

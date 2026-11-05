@@ -35,7 +35,7 @@ const firmwareState = (overrides = {}) => ({
   occupancy: {
     count: 3, occupied: true, valid: true, entrance_broken: false, exit_broken: false, entrance_raw: 1, exit_raw: 1,
     entrance_events: 10, exit_events: 7, exit_underflow_events: 0, last_event: 'entrance_fast_validated',
-    vacancy_delay_seconds: 30, detection_method: 'GOGOU_BREAK_BEAM_FAST_ISR_EDGE_FILTER', fast_pass_enabled: true,
+    vacancy_delay_seconds: 30, detection_method: 'E3F_DS200C4_NPN_NO_FAST_ISR_EDGE_FILTER', fast_pass_enabled: true,
     event_sequence: 17, last_passage_direction: 'entrance', last_passage_process_latency_ms: 1,
     person_classifier_present: false, human_only_guaranteed: false, passage_min_ms: 30, instant_latch_enabled: true,
     instant_latch_target_ms: 30, min_clear_gap_ms: 20, passage_max_ms: 5000, entrance_rejected_short: 0,

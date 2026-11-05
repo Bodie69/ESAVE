@@ -1,5 +1,5 @@
 #pragma once
-// Entrance/Exit IR break-beam sensing: ISRs, validated passage latching, noise guard, counting.
+// Entrance/Exit E3F-DS200C4 (NPN NO) proximity sensing: ISRs, validated passage latching, noise guard, counting.
 
 #include <Arduino.h>
 

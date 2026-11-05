@@ -1,5 +1,5 @@
 // ESAVE - Room 206 controller firmware (see README.md).
-// ESP32-WROOM-32 - 2x IR break-beam, 6 relays, PZEM-004T v3, I2C LCD,
+// ESP32-WROOM-32 - 2x E3F-DS200C4 NPN NO proximity, 6 relays, PZEM-004T v3, I2C LCD,
 // Bluetooth Classic SPP + Firebase Realtime Database over verified HTTPS.
 //
 // Tasks: sensorRealtimeTask (IR counting + AUTO, priority 4), firebaseNetworkTask (Firebase,
@@ -73,13 +73,15 @@ void setup() {
     digitalWrite(UNUSED_RELAY_PINS[i], RELAY_ACTIVE_LOW ? HIGH : LOW);
   }
 
-  // IR sensors: calibrate/restore clear levels, then start edge capture and the realtime task.
-  pinMode(ENTRANCE_IR_PIN, INPUT_PULLUP); // GPIO23 supports internal pull-up; stable for NPN/open-collector sensor output
-  pinMode(EXIT_IR_PIN, INPUT_PULLUP);     // internal pull-up enabled; external 10k pull-up still recommended
+  // E3F-DS200C4 NPN NO switches: open-collector OUT, so the pull-up to 3.3 V sets the HIGH
+  // (clear) level. The internal ~45k pull-up is weak; fit external 4.7-10k to 3.3 V (4.7k on long cables).
+  pinMode(ENTRANCE_IR_PIN, INPUT_PULLUP);
+  pinMode(EXIT_IR_PIN, INPUT_PULLUP);
+  delay(5);  // let the pull-ups charge the cable before the first read
   loadIrCalibration();
   attachInterrupt(digitalPinToInterrupt(ENTRANCE_IR_PIN), onEntranceBeamChange, CHANGE);
   attachInterrupt(digitalPinToInterrupt(EXIT_IR_PIN), onExitBeamChange, CHANGE);
-  Serial.println("[IR] INSTANT validated latch enabled: count after 30ms BREAK; CLEAR rearms next person");
+  Serial.println("[PROX] E3F-DS200C4 NPN NO (LOW=detect): count after 30ms detection; clear rearms next person");
   xTaskCreatePinnedToCore(sensorRealtimeTask, "sensorRealtime", SENSOR_TASK_STACK_BYTES, nullptr, 4, &sensorRealtimeTaskHandle, 1);
 
   lcdBegin();

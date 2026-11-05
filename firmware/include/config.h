@@ -8,7 +8,7 @@
 // ----------------------------------------------------------------------------- Identity
 
 // Reported to the app as state.schema_version; the app warns when it is older than it expects.
-#define FIRMWARE_VERSION "25.23"
+#define FIRMWARE_VERSION "25.24"
 
 static const char *const DEVICE_ID = "room206-controller";
 static const char *const ROOM_ID = "room206";
@@ -75,10 +75,17 @@ static const unsigned long WIFI_PORTAL_SAVE_RETRY_WINDOW_MS = 60000;
 
 // ----------------------------------------------------------------------------- Pins
 
-// GOGOU break-beam receiver OUT pins. Entrance moved from GPIO35 to GPIO23 (supports
-// INPUT_PULLUP on classic ESP32). Disconnect the former relay IN7 wire from GPIO23.
+// E3F-DS200C4 diffuse photoelectric proximity switches (NPN, normally open), black OUT wire.
+// Brown = +12..24 V (6-36 V; NOT the ESP32 3V3/5V rail), blue = 0 V tied to ESP32 GND.
+// NPN NO: OUT sinks to 0 V while an object is detected and is open when clear, so with a
+// pull-up to 3.3 V the GPIO reads LOW = detected, HIGH = clear. Polarity is fixed by the
+// sensor type, not learned. Never connect OUT straight to a GPIO if it measures above 3.3 V
+// with nothing attached (clone with internal pull-up to +V): add a Schottky diode, anode at
+// the GPIO, cathode at OUT. Disconnect the former relay IN7 wire from GPIO23.
 static const uint8_t ENTRANCE_IR_PIN = 23;
 static const uint8_t EXIT_IR_PIN = 32;
+static const bool PROX_DETECT_LEVEL = LOW;
+static const bool PROX_CLEAR_LEVEL = HIGH;
 
 // Six classroom load channels only: 4 lights + 2 fans. Former CH8 (GPIO18) is forced OFF at boot.
 static const uint8_t RELAY_COUNT = 6;
@@ -115,9 +122,11 @@ static const unsigned long VACANCY_DELAY_MS = 30000;
 
 static const unsigned long IR_DEBOUNCE_MS = 20;
 
-// A count is accepted only after a complete BREAK -> HOLD -> CLEAR pulse.
-// This rejects electrical glitches shorter than 30 ms and abnormally long obstructions.
-// Fast human crossings are accepted, but IR break-beam alone cannot prove the object is human.
+// A count is latched once a detection has been held for PASSAGE_MIN_BREAK_MS ("BREAK" below
+// means "sensor detects an object"). This rejects electrical glitches shorter than 30 ms; the
+// E3F responds in a few ms, and a person walking past takes ~150-400 ms.
+// Fast human crossings are accepted, but a reflective switch alone cannot prove the object is
+// human: a door leaf, bag or hand inside its range also counts.
 static const unsigned long PASSAGE_MIN_BREAK_MS = 30;
 static const unsigned long PASSAGE_MAX_BREAK_MS = 5000;
 static const unsigned long IR_RETRIGGER_GUARD_MS = 20;

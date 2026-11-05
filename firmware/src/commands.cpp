@@ -257,7 +257,7 @@ void pollFirebaseCommands() {
         if (!expired) calibrateIrSensors("firebase");
         lastCalibrateIrCommandId = id;
         prefs.putULong64("cmdCalIR", id);
-        queueAck(id, "calibrate_ir", !expired, expired ? "COMMAND_EXPIRED" : "CLEAR_LEVELS_SAVED");
+        queueAck(id, "calibrate_ir", !expired, expired ? "COMMAND_EXPIRED" : "SENSORS_REARMED");
       }
     }
   }

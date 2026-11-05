@@ -56,7 +56,7 @@ void buildState(JsonDocument &doc, bool forFirebase) {
   occ["exit_underflow_events"] = exitUnderflowEvents;
   occ["last_event"] = lastOccupancyEvent;
   occ["vacancy_delay_seconds"] = VACANCY_DELAY_MS / 1000UL;
-  occ["detection_method"] = "GOGOU_BREAK_BEAM_FAST_ISR_EDGE_FILTER";
+  occ["detection_method"] = "E3F_DS200C4_NPN_NO_FAST_ISR_EDGE_FILTER";
   occ["fast_pass_enabled"] = true;
   occ["event_sequence"] = occupancyEventSequence;
   occ["last_passage_direction"] = lastPassageDirection;

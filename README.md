@@ -57,8 +57,8 @@ Board: **ESP32-WROOM-32** (classic ESP32 — Bluetooth Classic SPP is required, 
 
 | Function | ESP32 pin | Notes |
 |---|---|---|
-| Entrance IR receiver OUT | GPIO23 | `INPUT_PULLUP`; NPN/open-collector; common GND; must be 3.3 V-safe |
-| Exit IR receiver OUT | GPIO32 | `INPUT_PULLUP`; external 10 k pull-up recommended |
+| Entrance E3F-DS200C4 OUT (black) | GPIO23 | NPN NO: LOW = detected; `INPUT_PULLUP` + external 4.7–10 k to 3.3 V |
+| Exit E3F-DS200C4 OUT (black) | GPIO32 | same as entrance |
 | Relay CH1–CH4 (light1–light4) | GPIO13, 33, 14, 27 | relay board is **active LOW** |
 | Relay CH5–CH6 (fan1, fan2) | GPIO26, 25 | active LOW |
 | Former relay CH8 | GPIO18 | held OFF at boot; unused |
@@ -67,6 +67,24 @@ Board: **ESP32-WROOM-32** (classic ESP32 — Bluetooth Classic SPP is required, 
 | I2C LCD 16×2 SDA / SCL | GPIO21 / GPIO22 | address `0x27` (change `LCD_ADDRESS` if yours is `0x3F`) |
 
 The old relay IN7 wire must **not** be connected to GPIO23 any more (GPIO23 is the Entrance sensor).
+
+**E3F-DS200C4 proximity switches (NPN, normally open):**
+
+- Brown → +12 V or +24 V (6–36 V DC). The ESP32's 3.3 V/5 V rail cannot power them.
+- Blue → 0 V, and that 0 V **must** be joined to ESP32 GND.
+- Black (OUT) → GPIO, with a 4.7–10 kΩ pull-up to **3.3 V**. The output pulls to 0 V while it sees an
+  object and is open when the path is clear, so the firmware treats LOW as detected (fixed in
+  `PROX_DETECT_LEVEL`; nothing is learned at calibration).
+- Before you connect OUT, power the sensor and measure OUT to 0 V with nothing in front of it.
+  It should read about 0 V or float. If it reads near the supply voltage, the sensor has an
+  internal pull-up. Fit a Schottky diode (e.g. 1N5819), anode at the GPIO and cathode at OUT, so
+  12/24 V never reaches the ESP32.
+- These are *diffuse reflective* sensors: they detect what is within ~20 cm (less for dark
+  clothing; adjust with the sensitivity screw). Mount each one at waist height on the door frame,
+  facing across the doorway so people pass within range. Make sure the door leaf cannot swing
+  into the field, because that would count as a person.
+- A disconnected or unpowered NPN NO sensor reads the same as "clear", so the firmware cannot
+  tell it apart from an empty doorway. Check the sensor's LED when commissioning.
 
 ## 2. Firmware
 
@@ -103,7 +121,7 @@ everything else stays private (`static`) in `src/<module>.cpp`:
 | `include/config.h` | Pins, timing constants, `FIRMWARE_VERSION`, feature switches, build checks |
 | `main.cpp` | `setup()` boot sequence and `loop()` (Bluetooth, PZEM sampling, LCD, watchdog) |
 | `state` | Shared state, `StateLock` (recursive mutex), NVS-persisted settings |
-| `occupancy` | IR break-beam ISRs, validated passage latching, noise guard, people count |
+| `occupancy` | E3F proximity-switch ISRs, validated passage latching, noise guard, people count |
 | `relays` | Relay outputs with GPIO read-back, AUTO occupancy rules |
 | `energy` | PZEM-004T sampling and kWh reset |
 | `provisioning` | Wi-Fi station with NVS-saved credentials, reconnect backoff, setup AP + captive portal |
@@ -224,8 +242,9 @@ token is stored encrypted with an Android Keystore key and is never backed up.
 
 ## 5. Commissioning a room
 
-1. Flash the firmware with **both IR beams clear** — the first boot saves the clear-beam levels.
-   Re-run *Settings → Occupancy Sensors → CALIBRATE IR* any time the sensors are moved.
+1. Flash the firmware. Polarity is fixed (NPN NO, LOW = detected), so no calibration is needed.
+   *Settings → Occupancy Sensors → CALIBRATE IR* now only re-arms both sensors and logs their raw
+   levels; Serial warns if one is detecting at that moment.
 2. Join `ESAVE-Room206-Setup` and choose the classroom Wi-Fi at http://192.168.4.1/ (optional:
    the room works over Bluetooth alone).
 3. Pair the phone with `ESAVE-Room206` in Android Bluetooth settings using the PIN.
@@ -242,6 +261,8 @@ token is stored encrypted with an Android Keystore key and is never backed up.
 | Serial: `[HTTP] … failed … ssl=… certificate` | Google changed roots beyond `include/firebase_roots.h`, or NTP time is wrong. Update the bundle from https://pki.goog/repo/certs/; use `FIREBASE_TLS_INSECURE 1` only to confirm |
 | App: `ESP32 REJECTED … COMMAND_EXPIRED` | Phone clock more than 2 minutes off; enable automatic date/time |
 | Dashboard: firmware older than this app expects | Flash the current firmware (schema 25.16+) |
-| Dashboard: IR sensor noise detected | Floating/noisy sensor line: check common GND and 3.3 V-safe OUT, then correct the count |
+| Dashboard: IR sensor noise detected | Noisy sensor line: check the 4.7–10 k pull-ups (drop to 4.7 k on long cables), that sensor 0 V is joined to ESP32 GND, and that OUT is 3.3 V-safe, then correct the count |
+| Count never changes, sensor LED lights | OUT not wired to the GPIO, or no common GND |
+| Count jumps when the door moves | Door leaf inside the sensor range: turn down sensitivity or re-aim |
 | LCD shows `W:NONE` / `W:--` | No network saved / saved network unreachable: hold BOOT 3 s and set Wi-Fi at http://192.168.4.1/ |
 | LCD shows `PZEM: NO DATA` | No AC on the PZEM or UART wiring (GPIO16/17) |

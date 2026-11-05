@@ -505,7 +505,7 @@ public final class MainActivity extends Activity implements BluetoothLinkService
     private void confirmCalibrateIr() {
         new AlertDialog.Builder(this)
                 .setTitle("Calibrate IR sensors")
-                .setMessage("Make sure BOTH Entrance and Exit beams are CLEAR. The ESP32 will save the present raw levels as the normal clear-beam state.")
+                .setMessage("Make sure nothing is in front of the Entrance or Exit sensor. The ESP32 will re-arm both sensors (polarity is fixed for the E3F NPN NO switches).")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Calibrate", (d, w) -> sendCalibrateIr())
                 .show();
