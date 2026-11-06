@@ -8,7 +8,7 @@
 // ----------------------------------------------------------------------------- Identity
 
 // Reported to the app as state.schema_version; the app warns when it is older than it expects.
-#define FIRMWARE_VERSION "25.25"
+#define FIRMWARE_VERSION "25.26"
 
 static const char *const DEVICE_ID = "room206-controller";
 static const char *const ROOM_ID = "room206";
@@ -130,10 +130,16 @@ static const unsigned long IR_DEBOUNCE_MS = 20;
 static const unsigned long PASSAGE_MIN_BREAK_MS = 30;
 static const unsigned long PASSAGE_MAX_BREAK_MS = 5000;
 static const unsigned long IR_RETRIGGER_GUARD_MS = 20;
-static const unsigned long IR_MIN_CLEAR_GAP_MS = 20;
+// One person can make a diffuse reflective switch drop out and re-detect (gap between torso and
+// swinging arm, dark or shiny clothing). A re-detection that starts less than IR_MIN_CLEAR_GAP_MS
+// after the last clear, or less than PASSAGE_REFRACTORY_MS after the last count, is merged into
+// that person instead of counting again. People following each other closely are ~0.5-1 s apart.
+static const unsigned long IR_MIN_CLEAR_GAP_MS = 150;
+static const unsigned long PASSAGE_REFRACTORY_MS = 300;
 static const uint32_t PASSAGE_MIN_BREAK_US = PASSAGE_MIN_BREAK_MS * 1000UL;
 static const uint32_t PASSAGE_MAX_BREAK_US = PASSAGE_MAX_BREAK_MS * 1000UL;
 static const uint32_t IR_MIN_CLEAR_GAP_US = IR_MIN_CLEAR_GAP_MS * 1000UL;
+static const uint32_t PASSAGE_REFRACTORY_US = PASSAGE_REFRACTORY_MS * 1000UL;
 
 // A high burst of sub-minimum IR pulses means the input is electrically noisy/floating.
 // Counting is locked out until the line is quiet so noise cannot become a false occupant.

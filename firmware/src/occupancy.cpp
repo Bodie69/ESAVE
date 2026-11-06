@@ -51,14 +51,19 @@ void IRAM_ATTR onEntranceBeamChange() {
     entranceBrokenIsr = true;
     entranceBreakStartedUs = nowUs;
     entranceCountedThisBreak = false;
-    entrancePulseEligible = entranceLastClearUs == 0 ||
-        (uint32_t)(nowUs - entranceLastClearUs) >= IR_MIN_CLEAR_GAP_US;
+    // A detection that starts right after the previous one cleared, or soon after the last
+    // count, is the same person (arm swing, dark/shiny clothing flicker): merge it, never count it.
+    entrancePulseEligible = (entranceLastClearUs == 0 ||
+        (uint32_t)(nowUs - entranceLastClearUs) >= IR_MIN_CLEAR_GAP_US) &&
+        (uint32_t)(nowUs - entranceLastAcceptedUs) >= PASSAGE_REFRACTORY_US;
   } else if (!broken && entranceBrokenIsr) {
     uint32_t widthUs = (uint32_t)(nowUs - entranceBreakStartedUs);
     entranceBrokenIsr = false;
     entranceLastClearUs = nowUs;
     if (!entranceCountedThisBreak) {
-      if (!entrancePulseEligible || widthUs < PASSAGE_MIN_BREAK_US) {
+      if (!entrancePulseEligible) {
+        // merged into the previous person (see above); the flip counter still catches a chattering line
+      } else if (widthUs < PASSAGE_MIN_BREAK_US) {
         if (entranceRejectedShortIsr < 0xFFFFFFFFUL) entranceRejectedShortIsr++;
       } else if (widthUs > PASSAGE_MAX_BREAK_US) {
         if (entranceRejectedLongIsr < 0xFFFFFFFFUL) entranceRejectedLongIsr++;
@@ -84,14 +89,19 @@ void IRAM_ATTR onExitBeamChange() {
     exitBrokenIsr = true;
     exitBreakStartedUs = nowUs;
     exitCountedThisBreak = false;
-    exitPulseEligible = exitLastClearUs == 0 ||
-        (uint32_t)(nowUs - exitLastClearUs) >= IR_MIN_CLEAR_GAP_US;
+    // A detection that starts right after the previous one cleared, or soon after the last
+    // count, is the same person (arm swing, dark/shiny clothing flicker): merge it, never count it.
+    exitPulseEligible = (exitLastClearUs == 0 ||
+        (uint32_t)(nowUs - exitLastClearUs) >= IR_MIN_CLEAR_GAP_US) &&
+        (uint32_t)(nowUs - exitLastAcceptedUs) >= PASSAGE_REFRACTORY_US;
   } else if (!broken && exitBrokenIsr) {
     uint32_t widthUs = (uint32_t)(nowUs - exitBreakStartedUs);
     exitBrokenIsr = false;
     exitLastClearUs = nowUs;
     if (!exitCountedThisBreak) {
-      if (!exitPulseEligible || widthUs < PASSAGE_MIN_BREAK_US) {
+      if (!exitPulseEligible) {
+        // merged into the previous person (see above); the flip counter still catches a chattering line
+      } else if (widthUs < PASSAGE_MIN_BREAK_US) {
         if (exitRejectedShortIsr < 0xFFFFFFFFUL) exitRejectedShortIsr++;
       } else if (widthUs > PASSAGE_MAX_BREAK_US) {
         if (exitRejectedLongIsr < 0xFFFFFFFFUL) exitRejectedLongIsr++;
@@ -184,7 +194,7 @@ static void resetBeamState() {
   exitPulseEligible = true;
   uint32_t irNowUs = micros();
   entranceBreakStartedUs = exitBreakStartedUs = irNowUs;
-  entranceLastAcceptedUs = exitLastAcceptedUs = irNowUs;
+  entranceLastAcceptedUs = exitLastAcceptedUs = irNowUs - PASSAGE_REFRACTORY_US;
   entranceLastClearUs = exitLastClearUs = irNowUs - IR_MIN_CLEAR_GAP_US;
   interrupts();
 
