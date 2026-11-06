@@ -18,9 +18,13 @@ static volatile uint32_t entrancePendingPassages = 0;
 static volatile uint32_t exitPendingPassages = 0;
 static volatile uint32_t entranceRejectedShortIsr = 0;
 static volatile uint32_t entranceEdgeCountIsr = 0;
+// Edges that flipped the ISR state. Spikes too short to still read at ISR entry do not count,
+// so they cannot trip the noise guard (they cannot become a count either).
+static volatile uint32_t entranceTransitionCountIsr = 0;
 static volatile uint32_t entranceRejectedLongIsr = 0;
 static volatile uint32_t exitRejectedShortIsr = 0;
 static volatile uint32_t exitEdgeCountIsr = 0;
+static volatile uint32_t exitTransitionCountIsr = 0;
 static volatile uint32_t exitRejectedLongIsr = 0;
 static volatile uint32_t entranceBreakStartedUs = 0;
 static volatile uint32_t exitBreakStartedUs = 0;
@@ -42,6 +46,7 @@ void IRAM_ATTR onEntranceBeamChange() {
   int raw = gpio_get_level((gpio_num_t)ENTRANCE_IR_PIN);
   uint32_t nowUs = micros();
   bool broken = raw != entranceClearLevelIsr;
+  if (broken != entranceBrokenIsr && entranceTransitionCountIsr < 0xFFFFFFFFUL) entranceTransitionCountIsr++;
   if (broken && !entranceBrokenIsr) {
     entranceBrokenIsr = true;
     entranceBreakStartedUs = nowUs;
@@ -74,6 +79,7 @@ void IRAM_ATTR onExitBeamChange() {
   int raw = gpio_get_level((gpio_num_t)EXIT_IR_PIN);
   uint32_t nowUs = micros();
   bool broken = raw != exitClearLevelIsr;
+  if (broken != exitBrokenIsr && exitTransitionCountIsr < 0xFFFFFFFFUL) exitTransitionCountIsr++;
   if (broken && !exitBrokenIsr) {
     exitBrokenIsr = true;
     exitBreakStartedUs = nowUs;
@@ -145,6 +151,8 @@ static unsigned long exitNoiseUntil = 0;
 static unsigned long sensorNoiseWindowStartedAt = 0;
 static uint32_t entranceShortWindow = 0;
 static uint32_t exitShortWindow = 0;
+static uint32_t entranceTransitionsWindow = 0;
+static uint32_t exitTransitionsWindow = 0;
 static unsigned long lastSensorNoiseLogAt = 0;
 
 // Re-arm both ISR state machines from the current pin levels. Polarity is fixed (NPN NO:
@@ -164,6 +172,8 @@ static void resetBeamState() {
   exitRejectedShortIsr = exitRejectedLongIsr = 0;
   entranceEdgeCountIsr = 0;
   exitEdgeCountIsr = 0;
+  entranceTransitionCountIsr = 0;
+  exitTransitionCountIsr = 0;
   // A sensor that already detects something at reset is treated as mid-detection and already
   // counted: it must go clear before the next passage can count.
   entranceBrokenIsr = entranceBeam.broken;
@@ -236,6 +246,7 @@ void processOccupancy() {
   uint32_t entered = 0, exited = 0;
   uint32_t entShort = 0, entLong = 0, exitShort = 0, exitLong = 0;
   uint32_t entEdges = 0, exitEdges = 0;
+  uint32_t entTransitions = 0, exitTransitions = 0;
   uint32_t entAcceptedUs = 0, exitAcceptedUs = 0;
   noInterrupts();
   entered = entrancePendingPassages;
@@ -246,6 +257,8 @@ void processOccupancy() {
   exitLong = exitRejectedLongIsr;
   entEdges = entranceEdgeCountIsr;
   exitEdges = exitEdgeCountIsr;
+  entTransitions = entranceTransitionCountIsr;
+  exitTransitions = exitTransitionCountIsr;
   entAcceptedUs = entranceLastAcceptedUs;
   exitAcceptedUs = exitLastAcceptedUs;
   entrancePendingPassages = 0;
@@ -254,6 +267,8 @@ void processOccupancy() {
   exitRejectedShortIsr = exitRejectedLongIsr = 0;
   entranceEdgeCountIsr = 0;
   exitEdgeCountIsr = 0;
+  entranceTransitionCountIsr = 0;
+  exitTransitionCountIsr = 0;
   interrupts();
 
   // Track short-pulse bursts in a time window. A floating/open-collector input without a
@@ -265,14 +280,18 @@ void processOccupancy() {
     exitShortWindow = 0;
     entranceEdgesWindow = 0;
     exitEdgesWindow = 0;
+    entranceTransitionsWindow = 0;
+    exitTransitionsWindow = 0;
   }
   entranceShortWindow += entShort;
   exitShortWindow += exitShort;
   entranceEdgesWindow += entEdges;
   exitEdgesWindow += exitEdges;
+  entranceTransitionsWindow += entTransitions;
+  exitTransitionsWindow += exitTransitions;
 
   if (!entranceSensorNoisy && (entranceShortWindow >= SENSOR_SHORT_PULSE_ALARM_COUNT ||
-      entranceEdgesWindow >= SENSOR_EDGE_BURST_ALARM_COUNT)) {
+      entranceTransitionsWindow >= SENSOR_TRANSITION_BURST_ALARM_COUNT)) {
     entranceSensorNoisy = true;
     entranceNoiseUntil = now + SENSOR_NOISE_LOCKOUT_MS;
     entranceNoiseRejected += entered;
@@ -284,7 +303,7 @@ void processOccupancy() {
     markStateDirty("entrance_sensor_noisy");
   }
   if (!exitSensorNoisy && (exitShortWindow >= SENSOR_SHORT_PULSE_ALARM_COUNT ||
-      exitEdgesWindow >= SENSOR_EDGE_BURST_ALARM_COUNT)) {
+      exitTransitionsWindow >= SENSOR_TRANSITION_BURST_ALARM_COUNT)) {
     exitSensorNoisy = true;
     exitNoiseUntil = now + SENSOR_NOISE_LOCKOUT_MS;
     exitNoiseRejected += exited;
@@ -301,6 +320,7 @@ void processOccupancy() {
       entranceSensorNoisy = false;
       entranceShortWindow = 0;
       entranceEdgesWindow = 0;
+      entranceTransitionsWindow = 0;
       markStateDirty("entrance_sensor_quiet");
       Serial.println("[PROX] entrance line quiet again; counting unlocked, but reconcile occupancy count once");
     } else if (entered) {
@@ -313,6 +333,7 @@ void processOccupancy() {
       exitSensorNoisy = false;
       exitShortWindow = 0;
       exitEdgesWindow = 0;
+      exitTransitionsWindow = 0;
       markStateDirty("exit_sensor_quiet");
       Serial.println("[PROX] exit line quiet again; counting unlocked, but reconcile occupancy count once");
     } else if (exited) {
@@ -324,9 +345,9 @@ void processOccupancy() {
   if ((entranceSensorNoisy || exitSensorNoisy) &&
       (lastSensorNoiseLogAt == 0 || now - lastSensorNoiseLogAt >= 2000UL)) {
     lastSensorNoiseLogAt = now;
-    Serial.printf("[PROX][NOISE] entrance=%s short=%lu edges=%lu exit=%s short=%lu edges=%lu. GPIO23/GPIO32 use INPUT_PULLUP; add 4.7k pull-ups to 3.3 V and check sensor 0 V/common GND if noise persists.\n",
-                  entranceSensorNoisy ? "NOISY" : "OK", (unsigned long)entranceShortWindow, (unsigned long)entranceEdgesWindow,
-                  exitSensorNoisy ? "NOISY" : "OK", (unsigned long)exitShortWindow, (unsigned long)exitEdgesWindow);
+    Serial.printf("[PROX][NOISE] entrance=%s short=%lu flips=%lu edges=%lu exit=%s short=%lu flips=%lu edges=%lu. GPIO23/GPIO32 use INPUT_PULLUP; add 4.7k pull-ups to 3.3 V and check sensor 0 V/common GND if noise persists.\n",
+                  entranceSensorNoisy ? "NOISY" : "OK", (unsigned long)entranceShortWindow, (unsigned long)entranceTransitionsWindow, (unsigned long)entranceEdgesWindow,
+                  exitSensorNoisy ? "NOISY" : "OK", (unsigned long)exitShortWindow, (unsigned long)exitTransitionsWindow, (unsigned long)exitEdgesWindow);
   }
 
   if (entShort || entLong || exitShort || exitLong) {

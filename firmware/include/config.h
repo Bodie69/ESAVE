@@ -8,7 +8,7 @@
 // ----------------------------------------------------------------------------- Identity
 
 // Reported to the app as state.schema_version; the app warns when it is older than it expects.
-#define FIRMWARE_VERSION "25.24"
+#define FIRMWARE_VERSION "25.25"
 
 static const char *const DEVICE_ID = "room206-controller";
 static const char *const ROOM_ID = "room206";
@@ -140,7 +140,10 @@ static const uint32_t IR_MIN_CLEAR_GAP_US = IR_MIN_CLEAR_GAP_MS * 1000UL;
 static const unsigned long SENSOR_NOISE_WINDOW_MS = 1000;
 static const unsigned long SENSOR_NOISE_LOCKOUT_MS = 5000;
 static const uint32_t SENSOR_SHORT_PULSE_ALARM_COUNT = 12;
-static const uint32_t SENSOR_EDGE_BURST_ALARM_COUNT = 24;
+// Counted on state flips only (BREAK<->CLEAR as the ISR saw it), not raw GPIO edges: sub-microsecond
+// spikes from relay/EMI coupling that are gone by ISR entry are harmless and must not lock counting.
+// 24 flips/s = 12 detections/s, far above any real doorway traffic.
+static const uint32_t SENSOR_TRANSITION_BURST_ALARM_COUNT = 24;
 
 // ----------------------------------------------------------------------------- Local I/O timing
 
